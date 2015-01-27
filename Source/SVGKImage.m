@@ -80,8 +80,12 @@ static NSMutableDictionary* globalSVGKImageCache;
 
 #pragma mark - Convenience initializers
 + (SVGKImage *)imageNamed:(NSString *)name {
-	NSParameterAssert(name != nil);
-    
+  return [self imageNamed:name bundle:nil];
+}
+
++ (SVGKImage *)imageNamed:(NSString *)name bundle:(NSBundle *)bundle {
+  NSParameterAssert(name != nil);
+
 #ifdef ENABLE_GLOBAL_IMAGE_CACHE_FOR_SVGKIMAGE_IMAGE_NAMED
     if( globalSVGKImageCache == nil )
     {
@@ -95,9 +99,11 @@ static NSMutableDictionary* globalSVGKImageCache;
         return cacheLine.mainInstance;
     }
 #endif
-	
-	NSBundle *bundle = [NSBundle mainBundle];
-	
+
+  if (!bundle) {
+	  bundle = [NSBundle mainBundle];
+	}
+  
 	if (!bundle)
 		return nil;
 	
